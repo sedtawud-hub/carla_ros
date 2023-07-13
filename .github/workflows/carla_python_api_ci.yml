@@ -1,0 +1,38 @@
+name: Carla Client Python Package Build CI
+
+on: 
+  push:
+    tags:
+      - '*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    container:
+      image: gezp/ubuntu-desktop:22.04
+    steps:
+      - uses: actions/checkout@v3
+      - name: Get Carla Version
+        run: |
+          echo "CARLA_VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+      - name: Install dependencies
+        run: |
+          apt-get update
+          apt-get install -y build-essential clang lld cmake ninja-build libpng-dev libtiff5-dev libjpeg-dev tzdata sed curl unzip autoconf libtool rsync libxml2-dev
+      - name: Download carla github repository
+        run: |
+          git clone --depth 1 -b ${{env.CARLA_VERSION}} https://github.com/carla-simulator/carla.git
+      - name: Build python package for carla client
+        run: |
+          cd carla
+          make PythonAPI.3
+      - name: Release
+        uses: ncipollo/release-action@v1
+        with:
+          allowUpdates: true
+          body: |
+            These python packages are built and released by CI for carla client python api.
+            OS: ubuntu22.04
+            Carla: v${{env.CARLA_VERSION}}
