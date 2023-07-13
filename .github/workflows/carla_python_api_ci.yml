@@ -36,3 +36,4 @@ jobs:
             These python packages are built and released by CI for carla client python api.
             OS: ubuntu22.04
             Carla: v${{env.CARLA_VERSION}}
+          artifacts: "carla/PythonAPI/carla/dist/*"
