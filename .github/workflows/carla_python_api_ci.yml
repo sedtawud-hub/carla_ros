@@ -1,9 +1,24 @@
 name: Carla Client Python Package Build CI
 
 on: 
-  push:
-    tags:
-      - '*'
+  workflow_dispatch:
+    inputs:
+      ubuntu-version:
+        description: 'ubuntu version'
+        required: true
+        default: '22.04'
+        type: choice
+        options:
+        - 20.04
+        - 22.04
+      carla-version:
+        description: 'carla version'
+        required: true
+        default: '0.9.13'
+        type: choice
+        options:
+        - 0.9.13
+        - 0.9.14
 
 jobs:
   build:
@@ -11,12 +26,12 @@ jobs:
     permissions:
       contents: write
     container:
-      image: gezp/ubuntu-desktop:22.04
+      image: gezp/ubuntu-desktop:${{github.event.inputs.ubuntu-version}}
     steps:
       - uses: actions/checkout@v3
       - name: Get Carla Version
         run: |
-          echo "CARLA_VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+          echo "CARLA_VERSION=${{github.event.inputs.carla-version}}" >> $GITHUB_ENV
       - name: Install dependencies
         run: |
           apt-get update
@@ -24,13 +39,16 @@ jobs:
       - name: Download carla github repository
         run: |
           git clone --depth 1 -b ${{env.CARLA_VERSION}} https://github.com/carla-simulator/carla.git
-      - name: update build tool for v0.9.13
+      - name: Update build tool for v0.9.13
         if: ${{ env.CARLA_VERSION == '0.9.13' }}
         run: |
           rm -rf carla/Util
           mkdir tmp && cd tmp
           git clone --depth 1 -b 0.9.14 https://github.com/carla-simulator/carla.git
           cd .. && cp -r tmp/carla/Util carla
+      - name : Disable test
+        run: |
+          sed -i 's/add_subdirectory(\"test\")/#add_subdirectory(\"test\")/g' carla/LibCarla/cmake/CMakeLists.txt
       - name: Build python package for carla client
         run: |
           cd carla
@@ -39,8 +57,9 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           allowUpdates: true
+          tag: ubuntu-${{github.event.inputs.ubuntu-version}}-carla-${{env.CARLA_VERSION}}
           body: |
             These python packages are built and released by CI for carla client python api.
-            OS: ubuntu22.04
+            OS: ${{github.event.inputs.ubuntu-version}}
             Carla: v${{env.CARLA_VERSION}}
           artifacts: "carla/PythonAPI/carla/dist/*"
