@@ -21,6 +21,13 @@ jobs:
         run: |
           apt-get update
           apt-get install -y build-essential clang lld cmake ninja-build libpng-dev libtiff5-dev libjpeg-dev tzdata sed curl unzip autoconf libtool rsync libxml2-dev
+      - name: Clang 8 for v0.9.13
+        if: ${{ env.CARLA_VERSION == '0.9.13' }}
+        run: |
+           cd /usr/bin
+           ln -s ../lib/llvm-14/bin/clang clang-8
+           ln -s ../lib/llvm-14/bin/clang++ clang++-8
+           ln -s ../lib/llvm-14/bin/clang-cpp clang-cpp-8
       - name: Download carla github repository
         run: |
           git clone --depth 1 -b ${{env.CARLA_VERSION}} https://github.com/carla-simulator/carla.git
