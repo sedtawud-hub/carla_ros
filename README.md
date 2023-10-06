@@ -15,7 +15,7 @@ Install client library
 * download python package of client library for ubuntu22.04 in [release(ubuntu-22.04-carla-0.9.14)](https://github.com/gezp/carla_ros/releases/)
 
 ```
- pip3 install carla-0.9.14-cp310-cp310-linux_x86_64.whl
+pip3 install carla-0.9.14-cp310-cp310-linux_x86_64.whl
 ```
 
 Build `carla-simulator/ros-bridge`
@@ -25,8 +25,9 @@ git clone --recurse-submodules https://github.com/gezp/carla_ros.git -b humble-c
 # install dependencies
 cd ..
 rosdep install --from-paths src --ignore-src -r
+pip3 install pygame
 # complie
-colcon colcon build --symlink-install
+colcon build --symlink-install
 ```
 
 > Tip: carla server and client could run on differnet machines separately (or Docker Container), so you can install and run carla server on ubuntu18.04 or windows10/11, but run carla client and ROS on ubuntu22.04.
