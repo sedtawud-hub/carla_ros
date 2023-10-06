@@ -29,18 +29,15 @@ jobs:
       image: gezp/ubuntu-desktop:${{github.event.inputs.ubuntu-version}}
     steps:
       - uses: actions/checkout@v3
-      - name: Get Carla Version
-        run: |
-          echo "CARLA_VERSION=${{github.event.inputs.carla-version}}" >> $GITHUB_ENV
       - name: Install dependencies
         run: |
           apt-get update
           apt-get install -y build-essential clang lld cmake ninja-build libpng-dev libtiff5-dev libjpeg-dev tzdata sed curl unzip autoconf libtool rsync libxml2-dev
       - name: Download carla github repository
         run: |
-          git clone --depth 1 -b ${{env.CARLA_VERSION}} https://github.com/carla-simulator/carla.git
+          git clone --depth 1 -b ${{github.event.inputs.carla-version}} https://github.com/carla-simulator/carla.git
       - name: Update build tool for v0.9.13
-        if: ${{ env.CARLA_VERSION == '0.9.13' }}
+        if: ${{ github.event.inputs.carla-version == '0.9.13' }}
         run: |
           rm -rf carla/Util
           mkdir tmp && cd tmp
@@ -57,9 +54,9 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           allowUpdates: true
-          tag: ubuntu-${{github.event.inputs.ubuntu-version}}-carla-${{env.CARLA_VERSION}}
+          tag: ubuntu-${{github.event.inputs.ubuntu-version}}-carla-${{github.event.inputs.carla-version}}
           body: |
             These python packages are built and released by CI for carla client python api.
-            OS: ${{github.event.inputs.ubuntu-version}}
-            Carla: v${{env.CARLA_VERSION}}
+            OS: ubuntu-${{github.event.inputs.ubuntu-version}}
+            Carla: v${{github.event.inputs.carla-version}}
           artifacts: "carla/PythonAPI/carla/dist/*"
