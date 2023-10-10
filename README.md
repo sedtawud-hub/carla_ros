@@ -12,7 +12,7 @@ Environment
 
 Install client library
 
-* download python package of client library for ubuntu22.04 in [release(ubuntu-22.04-carla-0.9.14)](https://github.com/gezp/carla_ros/releases/)
+* download python package of client library for ubuntu22.04 in [release(carla-0.9.14-ubuntu-22.04)](https://github.com/gezp/carla_ros/releases/)
 
 ```
 pip3 install carla-0.9.14-cp310-cp310-linux_x86_64.whl

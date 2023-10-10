@@ -6,7 +6,7 @@ on:
       ubuntu-version:
         description: 'ubuntu version'
         required: true
-        default: '22.04'
+        default: '20.04'
         type: choice
         options:
         - 20.04
@@ -54,9 +54,9 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           allowUpdates: true
-          tag: ubuntu-${{github.event.inputs.ubuntu-version}}-carla-${{github.event.inputs.carla-version}}
+          tag: carla-${{github.event.inputs.carla-version}}-ubuntu-${{github.event.inputs.ubuntu-version}}
           body: |
             These python packages are built and released by CI for carla client python api.
-            OS: ubuntu-${{github.event.inputs.ubuntu-version}}
             Carla: v${{github.event.inputs.carla-version}}
+            OS: ubuntu-${{github.event.inputs.ubuntu-version}}
           artifacts: "carla/PythonAPI/carla/dist/*"
