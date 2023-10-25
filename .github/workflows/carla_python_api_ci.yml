@@ -36,16 +36,23 @@ jobs:
       - name: Download carla github repository
         run: |
           git clone --depth 1 -b ${{github.event.inputs.carla-version}} https://github.com/carla-simulator/carla.git
-      - name: Update build tool for v0.9.13
+      - name: Replace build tool with 0.9.14 for v0.9.13
         if: ${{ github.event.inputs.carla-version == '0.9.13' }}
         run: |
-          rm -rf carla/Util
+          rm -rf carla/Util/BuildTools
           mkdir tmp && cd tmp
-          git clone --depth 1 -b 0.9.14 https://github.com/carla-simulator/carla.git
-          cd .. && cp -r tmp/carla/Util carla
+          git clone --depth 1 -b 0.9.14 https://github.com/carla-simulator/carla.git 
+          cd .. && cp -r tmp/carla/Util/BuildTools carla/Util
+      - name : Fix carla/Util/BuildTools/Setup.sh
+        run: |
+          sed -i 's/git reset --hard ${RECAST_COMMIT}/git checkout carla/g' carla/Util/BuildTools/Setup.sh
+          sed -i '/mkdir -p \"${PWD}\/${RECAST_BASENAME}-install\/include\/recast\"/d' carla/Util/BuildTools/Setup.sh
+          sed -i '/mv \"${PWD}\/${RECAST_BASENAME}-install\/include\/\"\*h/d' carla/Util/BuildTools/Setup.sh
       - name : Disable test
         run: |
           sed -i 's/add_subdirectory(\"test\")/#add_subdirectory(\"test\")/g' carla/LibCarla/cmake/CMakeLists.txt
+      - name : Remove dirty label
+        run: |
           sed -i 's/git describe --tags --dirty --always/git describe --tags --always/g' carla/Util/BuildTools/Environment.sh
       - name: Build python package for carla client
         run: |
