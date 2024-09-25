@@ -1,6 +1,6 @@
 # ROS/ROS2 bridge for CARLA simulator
 
-This is a fork of [carla-simulator/ros-bridge](https://github.com/carla-simulator/ros-bridge) to adapt ros humble and carla 0.9.14.
+This is a fork of [gezp/carla_ros]((https://github.com/gezp/carla_ros/tree/carla-python-api)) to adapt ros humble, carla 0.9.15 and numpy 2.x.x
 
 ### Quickly Start
 
@@ -9,10 +9,11 @@ Environment
 * OS: ubuntu 22.04
 * ROS2: Humble
 * Carla Simulator: 0.9.14
+* Numpy: 2.1.1
 
 Install client library
 
-* download python package of client library for ubuntu22.04 in [release(carla-0.9.14-ubuntu-22.04)](https://github.com/gezp/carla_ros/releases/)
+* download python package of client library for ubuntu22.04 in [release(carla-0.9.15-ubuntu-22.04)](https://github.com/gezp/carla_ros/releases/)
 
 ```
 pip3 install carla-0.9.14-cp310-cp310-linux_x86_64.whl
@@ -21,7 +22,7 @@ pip3 install carla-0.9.14-cp310-cp310-linux_x86_64.whl
 Build `carla-simulator/ros-bridge`
 ```bash
 # cd workspace/src
-git clone --recurse-submodules https://github.com/gezp/carla_ros.git -b humble-carla-0.9.14
+git clone --recurse-submodules https://github.com/sedtawud-hub/carla_ros.git
 # install dependencies
 cd ..
 rosdep install --from-paths src --ignore-src -r
