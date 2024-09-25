@@ -1,6 +1,6 @@
 # ROS/ROS2 bridge for CARLA simulator
 
-This is a fork of [gezp/carla_ros]((https://github.com/gezp/carla_ros/tree/carla-python-api)) to adapt ros humble, carla 0.9.15 and numpy 2.x.x
+This is a fork of [gezp/carla_ros](https://github.com/gezp/carla_ros/tree/carla-python-api). to adapt ros humble, carla 0.9.15 and numpy 2.x.x
 
 ### Quickly Start
 
